@@ -1,7 +1,12 @@
 // Theme management
 class ThemeManager {
     constructor() {
-        this.theme = localStorage.getItem('theme') || 'light';
+        this.theme = 'light';
+        try {
+            this.theme = localStorage.getItem('theme') || 'light';
+        } catch (e) {
+            console.warn('localStorage is not available. Defaulting to light theme.');
+        }
         this.init();
     }
 
@@ -19,7 +24,11 @@ class ThemeManager {
     setTheme(theme) {
         this.theme = theme;
         document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
+        try {
+            localStorage.setItem('theme', theme);
+        } catch (e) {
+            console.warn('localStorage is not available. Theme settings will not be saved.');
+        }
         
         // Update theme toggle button aria-label
         const themeToggle = document.getElementById('theme-toggle');
@@ -274,17 +283,20 @@ class GitHubIssuesLoader {
         if (!contentElement) return;
 
         try {
+            console.log(`Fetching issues for label: ${label}`);
             const issues = await this.fetchIssues(label);
+            console.log(`Fetched issues for ${label}:`, issues);
             const html = this.renderIssues(issues);
             contentElement.innerHTML = html;
         } catch (error) {
             console.error(`Error loading ${label} content:`, error);
-            contentElement.innerHTML = `<div class="error-message"><p>Sorry, unable to load ${label} content at this time.</p></div>`;
+            contentElement.innerHTML = `<div class="error-message"><p>Sorry, unable to load ${label} content at this time.</p><p><small>${error.message}</small></p></div>`;
         }
     }
 
     async fetchIssues(label) {
         const url = `https://api.github.com/repos/${this.repo}/issues?labels=${label}`;
+        console.log(`Fetching from URL: ${url}`);
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -460,7 +472,11 @@ class GitHubIssuesLoader {
 // Initialize all functionality when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all components
-    new ThemeManager();
+    try {
+        new ThemeManager();
+    } catch (e) {
+        console.warn('Failed to initialize ThemeManager:', e);
+    }
     new MobileNavigation();
     new SmoothScroll();
     

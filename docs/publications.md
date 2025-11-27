@@ -13,12 +13,12 @@
             </a>
         </h3>
         <div class="publication-venue">NeurIPS 2025 spotlight</div>
-        <div class="publication-authors">J Rosser, Jakob Foerster</div>
+        <div class="publication-authors">p0kks, Jakob Foerster</div>
         <div class="publication-year">2025</div>
         <div class="publication-tags">
             <span class="tag tag-safety">Multi-Agent Safety</span>
             <a href="https://arxiv.org/abs/2502.00757" class="tag tag-arxiv">ARXIV</a>
-            <a href="https://github.com/J-Rosser-UK/AgentBreeder" class="tag tag-github">GITHUB</a>
+            <a href="https://github.com/p0kks/AgentBreeder" class="tag tag-github">GITHUB</a>
         </div>
     </div>
 </div>
@@ -34,7 +34,7 @@
             </a>
         </h3>
         <div class="publication-venue">NeurIPS 2025 Mech Interp Workshop</div>
-        <div class="publication-authors">J Rosser, José Luis Redondo García, Gustavo Penha, Konstantina Palla, Hugues Bouchard</div>
+        <div class="publication-authors">p0kks, José Luis Redondo García, Gustavo Penha, Konstantina Palla, Hugues Bouchard</div>
         <div class="publication-year">2025</div>
         <div class="publication-tags">
             <span class="tag tag-safety">Mechanistic Interpretability</span>
@@ -54,7 +54,7 @@
             </a>
         </h3>
         <div class="publication-venue">NeurIPS 2025 Mech Interp Workshop</div>
-        <div class="publication-authors">Jiazheng Li, Andreas Damianou, J Rosser, José Luis Redondo García, Konstantina Palla</div>
+        <div class="publication-authors">Jiazheng Li, Andreas Damianou, p0kks, José Luis Redondo García, Konstantina Palla</div>
         <div class="publication-year">2025</div>
         <div class="publication-tags">
             <span class="tag tag-safety">Mechanistic Interpretability</span>

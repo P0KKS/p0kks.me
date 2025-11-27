@@ -257,71 +257,52 @@ class LazyImageLoader {
     }
 }
 
-// Markdown content loader
-class MarkdownLoader {
-    constructor() {
-        this.sections = ['about', 'news', 'publications', 'resume'];
+// GitHub Issues content loader
+class GitHubIssuesLoader {
+    constructor(repo) {
+        this.repo = repo;
         this.init();
     }
 
     init() {
-        // Load all markdown sections
-        this.sections.forEach(section => {
-            this.loadMarkdown(section);
-        });
+        this.loadIssues('projects');
+        this.loadIssues('notes');
     }
 
-    async loadMarkdown(section) {
-        const contentElement = document.getElementById(`${section}-content`);
+    async loadIssues(label) {
+        const contentElement = document.getElementById(`${label}-content`);
         if (!contentElement) return;
 
-        // Try multiple path strategies for better compatibility
-        const pathsToTry = [
-            `./${section}.md`,           // Relative to current directory
-            `${section}.md`,             // Direct relative path
-            `/${section}.md`             // Absolute from root (for some GitHub Pages setups)
-        ];
+        try {
+            const issues = await this.fetchIssues(label);
+            const html = this.renderIssues(issues);
+            contentElement.innerHTML = html;
+        } catch (error) {
+            console.error(`Error loading ${label} content:`, error);
+            contentElement.innerHTML = `<div class="error-message"><p>Sorry, unable to load ${label} content at this time.</p></div>`;
+        }
+    }
 
-        let lastError = null;
-        
-        for (const fullPath of pathsToTry) {
-            try {
-                console.log(`Trying to fetch: ${fullPath}`);
-                const response = await fetch(fullPath);
-                if (response.ok) {
-                    const markdown = await response.text();
-                    const html = this.parseMarkdown(markdown);
-                    contentElement.innerHTML = html;
-                    // Apply hover effect to new content
-                    if (typeof window.applyBHoverEffect === 'function') {
-                        window.applyBHoverEffect(contentElement);
-                    }
-                    console.log(`Successfully loaded ${section} from: ${fullPath}`);
-                    return; // Success, exit early
-                } else {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-            } catch (error) {
-                console.warn(`Failed to load ${section} from ${fullPath}:`, error.message);
-                lastError = error;
-                // Continue to next path
-            }
+    async fetchIssues(label) {
+        const url = `https://api.github.com/repos/${this.repo}/issues?labels=${label}`;
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        return await response.json();
+    }
+
+    renderIssues(issues) {
+        if (issues.length === 0) {
+            return '<p>No content found.</p>';
         }
 
-        // If we get here, all paths failed
-        console.error(`Error loading ${section} content - all paths failed:`, lastError);
-        console.log(`Current location: ${window.location.href}`);
-        contentElement.innerHTML = `
-            <div class="error-message">
-                <p>Sorry, unable to load ${section} content at this time.</p>
-                <p><small>Last error: ${lastError?.message || 'Unknown error'}</small></p>
-                <p><small>Tried paths: ${pathsToTry.join(', ')}</small></p>
+        return issues.map(issue => `
+            <div class="issue">
+                <h3><a href="${issue.html_url}" target="_blank" rel="noopener noreferrer">${issue.title}</a></h3>
+                <div class="issue-body">${this.parseMarkdown(issue.body)}</div>
             </div>
-        `;
-        // Apply hover effect to error content
-        if (typeof window.applyBHoverEffect === 'function') {
-            window.applyBHoverEffect(contentElement);
-        }
+        `).join('');
     }
 
     parseMarkdown(markdown) {
@@ -487,7 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.navigationHighlightInstance = new NavigationHighlight();
     
     new LazyImageLoader();
-    new MarkdownLoader();
+    new GitHubIssuesLoader('p0kks/p0kks.me');
     
     // Apply hover effect to all 'b' letters on initial content
     if (typeof window.applyBHoverEffect === 'function') {

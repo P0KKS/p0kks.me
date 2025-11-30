@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
     <title>p0kks.me</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -37,7 +38,7 @@
             height: 80px;
             border-radius: 50%;
             margin: 0 auto 16px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
             display: flex;
             align-items: center;
             justify-content: center;
@@ -87,6 +88,19 @@
             background: #238636;
             border-color: #238636;
             color: #ffffff;
+        }
+
+        .nav-btn[data-tab="projects"]:hover,
+        .nav-btn[data-tab="projects"].active {
+            background: #1f6feb;
+            border-color: #1f6feb;
+        }
+
+        .nav-btn[data-tab="notes"]:hover,
+        .nav-btn[data-tab="notes"].active {
+            background: #ffc107;
+            border-color: #ffc107;
+            color: #0d1117;
         }
 
         .content {
@@ -146,6 +160,36 @@
             color: #8b949e;
         }
 
+        .about-text {
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #cccccc;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .social-icon {
+            color: #cccccc;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 8px 12px;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .social-icon:hover {
+            background: #161b22;
+            border-color: #8b949e;
+        }
+
         footer {
             text-align: center;
             margin-top: 40px;
@@ -159,9 +203,9 @@
 <body>
     <div class="container">
         <header>
-            <div class="logo">P</div>
-            <h1>p0kks</h1>
-            <div class="subtitle">Developer & Creator</div>
+            <img src="assets/logo.png" alt="p0kks logo" class="logo">
+            <h1>P0KKS</h1>
+            <div class="subtitle">Bedroom artist and vibe coder</div>
             <nav>
                 <button class="nav-btn active" data-tab="home">Home</button>
                 <button class="nav-btn" data-tab="projects">Projects</button>
@@ -171,7 +215,17 @@
 
         <main>
             <div id="home" class="content active">
-                <div class="loading">Loading...</div>
+                <p class="about-text">
+                    This is a placeholder for information about P0KKS.
+                    You can put your bio, interests, skills, or anything you want to share here.
+                </p>
+
+                <div class="social-links">
+                    <a href="https://github.com/p0kks" target="_blank" class="social-icon">GitHub</a>
+                    <a href="https://twitter.com/p0kks" target="_blank" class="social-icon">Twitter</a>
+                    <a href="https://t.me/p0kks" target="_blank" class="social-icon">Telegram</a>
+                    <a href="https://www.bandlab.com/p0kks" target="_blank" class="social-icon">BandLab</a>
+                </div>
             </div>
             <div id="projects" class="content">
                 <div class="loading">Loading...</div>
@@ -182,7 +236,7 @@
         </main>
 
         <footer>
-            Powered by GitHub Issues
+            &copy; <span id="year"></span> P0KKS. All Rights Reserved.
         </footer>
     </div>
 
@@ -237,7 +291,7 @@
                 new Date(b.created_at) - new Date(a.created_at)
             );
 
-            renderLinks(allIssues, 'home');
+
             renderLinks(allProjects, 'projects');
             renderLinks(notes, 'notes');
         }
@@ -253,6 +307,7 @@
         });
 
         fetchIssues();
+        document.getElementById('year').textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
